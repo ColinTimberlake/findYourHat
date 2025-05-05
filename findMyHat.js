@@ -5,6 +5,7 @@ const hole = 'O';
 const fieldCharacter = '░';
 const pathCharacter = '*';
 
+
 class Field {
   constructor(hatsAndHoles, field) {
     this._field=field;
@@ -12,16 +13,22 @@ class Field {
   }
 
   playGame() {
+    let gameOver=false;
+    //let playerX=0;
+    //let playerY=0;
+    //this._playerX=playerX;
+    //this.playerY=playerY;
     let y=0;
     let x=0;
     this.print(this._field);
 
-    while(this._hatsAndHoles[y][x] === pathCharacter || this._hatsAndHoles === fieldCharacter) {
+    while(/*this._hatsAndHoles[y][x] !== pathCharacter || this._hatsAndHoles !== fieldCharacter*/gameOver===false) {
       const direction=prompt("Which direction would you like to move? N for North, S for South, W for West, and E for East");
 
       if(direction.toUpperCase() === 'N') {
         if( y===0) {
           console.log("Sorry, You can't go further North. Try Again");
+          gameOver=true;
         } else {
           y-=1;
         }
@@ -30,6 +37,7 @@ class Field {
        else if(direction.toUpperCase() === 'S') {
         if( y >= this._field.length) {
           console.log("Sorry, You can't go further South. Try Again");
+          gameOver=true;
         } else {
           y+=1;
         }
@@ -38,6 +46,7 @@ class Field {
       else if(direction.toUpperCase() === 'W') {
         if( x===0) {
           console.log("Sorry, You can't go further West. Try Again");
+          gameOver=true;
         } else {
           x-=1;
         }
@@ -46,6 +55,7 @@ class Field {
       else if(direction.toUpperCase() === 'E') {
         if( x>=this._field[y].length) {
           console.log("Sorry, You can't go further East. Try Again");
+          gameOver=true;
         } else {
           x+=1
         }
@@ -57,9 +67,11 @@ class Field {
 
       if(this._hatsAndHoles[y][x] === hat) {
         console.log("You found the hat! You win!")
+        gameOver=true;
       }
       else if(this._hatsAndHoles[y][x] === hole) {
         console.log("You fell in a hole. Game Over.")
+        gameOver=true;
       }
       else {
         this._field[y][x]=pathCharacter;
