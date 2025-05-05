@@ -6,21 +6,122 @@ const fieldCharacter = '░';
 const pathCharacter = '*';
 
 class Field {
-  constructor(field) {
-    this.field=field;
+  constructor(hatsAndHoles, field) {
+    this._field=field;
+    this._hatsAndHoles=hatsAndHoles;
+  }
+
+  playGame() {
+    let y=0;
+    let x=0;
+    this.print(this._field);
+
+    while(this._hatsAndHoles[y][x] === pathCharacter || this._hatsAndHoles === fieldCharacter) {
+      const direction=prompt("Which direction would you like to move? N for North, S for South, W for West, and E for East");
+
+      if(direction.toUpperCase() === 'N') {
+        if( y===0) {
+          console.log("Sorry, You can't go further North. Try Again");
+        } else {
+          y-=1;
+        }
+      }
+
+       else if(direction.toUpperCase() === 'S') {
+        if( y >= this._field.length) {
+          console.log("Sorry, You can't go further South. Try Again");
+        } else {
+          y+=1;
+        }
+      }
+
+      else if(direction.toUpperCase() === 'W') {
+        if( x===0) {
+          console.log("Sorry, You can't go further West. Try Again");
+        } else {
+          x-=1;
+        }
+      }
+
+      else if(direction.toUpperCase() === 'E') {
+        if( x>=this._field[y].length) {
+          console.log("Sorry, You can't go further East. Try Again");
+        } else {
+          x+=1
+        }
+      }
+
+      else {
+        console.log("Invalid Entry. Please enter N,S,E,W")
+      }
+
+      if(this._hatsAndHoles[y][x] === hat) {
+        console.log("You found the hat! You win!")
+      }
+      else if(this._hatsAndHoles[y][x] === hole) {
+        console.log("You fell in a hole. Game Over.")
+      }
+      else {
+        this._field[y][x]=pathCharacter;
+        this.print(this._field);
+      }
+    }
   }
 
   print() {
-    let currentState=this.field.join();
-    console.log(currentState)
+    for(let row of this._field) {
+      console.log(row.join(' '));
+    }
+  }
+  
+  static generateField(height, width, holes) {
+    let newField=[];
+    for (let i=0; i< height; i++) {
+      newField.push([]);
+      for( let j=0; j< height; j++) {
+        newField[i].push(fieldCharacter)
+      };
+    };
+    newField[0][0] = pathCharacter;
+    let hatX = Math.floor(Math.random()*width);
+    let hatY = Math.floor(Math.random()*height);
+    newField[hatY][hatX]=hat;
+
+    for( let k=holes; k> 0; k--) {
+      let holeX=hatX;
+      let holeY=hatY;
+      while(holeX===hatX) {
+        holeX=Math.floor(Math.random()*width)
+      };
+      while(holeY===hatY) {
+        holeY=Math.floor(Math.random()*height)
+      };
+      newField[holeY][holeX] = hole;
+    }
+    return newField;
+  }
+
+  static generateBlankField(height, width) {
+    let newField=[];
+    for(let i=0; i<height; i++) {
+      newField.push([]);
+      for(let j=0; j< height; j++) {
+        newField[i].push(fieldCharacter)
+      };
+    };
+    newField[0][0]=pathCharacter;
+    return newField;
   }
 }
 
-const myField = new Field([
-    ['*', '░', 'O'],
-    ['░', 'O', '░'],
-    ['░', '^', '░'],
-]);
 
-const direction=prompt("Which direction? ");
-  
+let myField;
+
+const blankField= Field.generateBlankField(5, 5);
+
+const newField=Field.generateField(5, 5, 1)
+console.log(blankField);
+
+myField= new Field(newField, blankField);
+
+myField.playGame()
