@@ -24,7 +24,8 @@ class Field {
 
     while(/*this._hatsAndHoles[y][x] !== pathCharacter || this._hatsAndHoles !== fieldCharacter*/gameOver===false) {
       const direction=prompt("Which direction would you like to move? N for North, S for South, W for West, and E for East");
-
+      console.log(`X: ${x}`)
+      console.log(`Y: ${y}`)//using these to find error in code why x will never time out for east but will for west, north, and south.
       if(direction.toUpperCase() === 'N') {
         if( y===0) {
           console.log("Sorry, You can't go further North. Try Again");
